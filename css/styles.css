@@ -1,0 +1,18 @@
+.userlist{
+	background-color : #42f4b0;
+
+	border : 1px solid #000;
+}
+
+.user {
+	margin:10px;
+	background-color : #42f4aa;
+	
+	
+}
+
+.userForm{
+	border-left : 1px solid #000;
+	background-color : #397a55;
+	color : #fff;
+}
