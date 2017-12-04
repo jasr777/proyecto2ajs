@@ -11,6 +11,7 @@
             add : add,
             remove : remove,
             update : update,
+            getUser : getUser
         };
         return service;
         ////////////////
@@ -28,6 +29,21 @@
         		return users;
         	}
 
+        }
+        function getUser(id){
+
+        	console.log("get the user with id " + id);
+        	let before = getAll();
+        	var user = {};
+
+        	for (var i = 0; i < before.length;i++){
+        		if(before[i].id == id){
+        			console.log(before[i]);
+        			user = before[i];
+        			break;
+        		}
+        	}
+        	return user;
         }
 
 

@@ -3,9 +3,9 @@
     angular
         .module('GeekAgenda')
         .controller('HomeController', HomeController);
-    HomeController.$inject = ['$scope','User'];
+    HomeController.$inject = ['$scope','$routeParams','User'];
     /* @ngInject */
-    function HomeController($scope, User) {
+    function HomeController($scope,$routeParams ,User) {
 
     /* --- Scope Variables --- */
     $scope.users = [];
@@ -28,6 +28,7 @@
 
         function createUser(user){
             user.id = randId();
+
             User.add(user);
             $scope.users = User.getAll();
             $scope.newUser = {};
