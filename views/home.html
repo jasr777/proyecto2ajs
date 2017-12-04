@@ -13,7 +13,7 @@
 						<p>Nombre : {{user.name}}</p>
 						<p>Telefono : {{user.phone}}</p>
 						<div class="botonera">
-							<a href="#!/user/{{user.id}}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+							<a href="#!/user/{{user.id}}"><i class="fa fa-eye" aria-hidden="true"></i></a>
 							<button  ng-click="editUser(user)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
 							<button ng-click="removeUser(user.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>						
 						</div>					
@@ -23,24 +23,53 @@
 
 			<div class=" col-md-4 userForm">
 				<h2>Nuevo Usuario</h2>
-				<div class="form-group">
-					<label for=""> Nombre</label>
-					<input class="form-control" type="text" ng-model="newUser.name">
+				<div>
+					<button ng-click="toggleDataFlag()">Datos</button>
+					<button ng-click="toggleGifsFlag()">Gifs</button>
+					<button ng-click ="toggleOthersFlag()">Otros</button>
 				</div>
-				<div class="form-group">
-					<label for=""> Email</label>
-					<input  class="form-control" type="email" ng-model="newUser.mail">
+
+				<div ng-if="dataFlag">
+					<div class="form-group">
+						<label for=""> Nombre</label>
+						<input class="form-control" type="text" ng-model="newUser.name">
+					</div>
+					<div class="form-group">
+						<label for=""> Email</label>
+						<input  class="form-control" type="email" ng-model="newUser.mail">
+					</div>
+					<div class="form-group">
+						<label for=""> Teléfono</label>
+						<input class="form-control" type="text" ng-model="newUser.phone">
+					</div>
+					<div class="form-group">
+						<label for=""> Foto</label>
+						<input class="form-control" type="text" ng-model="newUser.photo">
+					</div>
+					<button ng-show="createFlag" ng-click="createUser(newUser)" class="btn btn-primary btn-lg">Crear</button>
+					<button ng-show="editFlag" class="btn btn-primary btn-lg" ng-click="updateUser(newUser)"> Modificar</button>
 				</div>
-				<div class="form-group">
-					<label for=""> Teléfono</label>
-					<input class="form-control" type="text" ng-model="newUser.phone">
+
+
+
+				<div ng-if ="gifsFlag">
+					<h2>Gifs Favoritos</h2>
+					<!-- Gifs favoritos --> 
+					<div class="favgifs">
+						<!-- Populate with ng-repeat gif in favorite gifs -->
+
+					</div>
+					<input type="text" placeholder="Buscar gifs" ng-model="gifquery">
+					<p> Trending</p>
+					<p> Recents</p>
+
+					<button ng-click="searchGif(gifquery)">Buscar</button>
+					
+					<div class="searchresults">
+						<!-- Populate with ng-repeat gif in favorite gifs -->
+
+					</div>
 				</div>
-				<div class="form-group">
-					<label for=""> Foto</label>
-					<input class="form-control" type="text" ng-model="newUser.photo">
-				</div>
-				<button ng-show="createFlag" ng-click="createUser(newUser)" class="btn btn-primary btn-lg">Crear</button>
-				<button ng-show="editFlag" class="btn btn-primary btn-lg" ng-click="updateUser(newUser)"> Modificar</button>
 			</div>
 		</div>
 	</div>

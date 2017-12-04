@@ -3,21 +3,46 @@
     angular
         .module('GeekAgenda')
         .controller('HomeController', HomeController);
-    HomeController.$inject = ['$scope','$routeParams','User'];
+    HomeController.$inject = ['$scope','$routeParams','User','Giphy'];
     /* @ngInject */
-    function HomeController($scope,$routeParams ,User) {
+    function HomeController($scope,$routeParams ,User, Giphy) {
 
     /* --- Scope Variables --- */
+
+
+    /* User scope variables */
     $scope.users = [];
     $scope.newUser = {};
 
+
+    /* Giphy scope variables  */
+
+    $scope.gifs= [];
+
+    /* Flags scope variables */
+
     $scope.editFlag =false;
     $scope.createFlag = true;
+
+    $scope.dataFlag = true;
+    $scope.gifsFlag = false;
+    $scope.othersFlag= false;
+
+    ////////////////////////////////
     /* --- Scope Functions ---*/
+    /* Users */
     $scope.createUser = createUser;
     $scope.removeUser = removeUser;
     $scope.editUser = editUser;
     $scope.updateUser = updateUser;
+
+    /* Giphy */
+
+ 
+    /*Flags*/
+    $scope.toggleDataFlag = toggleDataFlag;
+    $scope.toggleGifsFlag= toggleGifsFlag;
+    $scope.toggleOthersFlag = toggleOthersFlag;
 
     activate();
         ////////////////
@@ -25,6 +50,29 @@
             $scope.users = User.getAll();
         }
 
+        /* -- Flag Toggle Functions -- */
+
+
+        function toggleDataFlag(){
+
+            $scope.dataFlag = true;
+            $scope.gifsFlag = false;
+            $scope.othersFlag= false;
+        }
+
+        function toggleGifsFlag(){
+            $scope.dataFlag = false;
+            $scope.gifsFlag = true;
+            $scope.othersFlag= false;
+        }
+
+        function toggleOthersFlag(){
+            $scope.dataFlag = false;
+            $scope.gifsFlag = false;
+            $scope.othersFlag= true;
+        }
+
+        /* -- User related functions -- */
 
         function createUser(user){
             user.id = randId();
@@ -62,7 +110,15 @@
             $scope.createFlag = true;
             $scope.newUser = {};
         }
+        /* - END USER FUNCTIONS - */
 
+
+        /* -- Gif Related functions -- */
+
+        function searchGif(query){
+            $scope.gifs = Giphy.findByQuery(query);
+
+        }
 
 
         /*-- Auxiliary functions --*/
