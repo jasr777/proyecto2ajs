@@ -3,9 +3,9 @@
     angular
         .module('GeekAgenda')
         .controller('HomeController', HomeController);
-    HomeController.$inject = ['$scope','$routeParams','User','Giphy'];
+    HomeController.$inject = ['$scope','$routeParams','User','Giphy','Marvel'];
     /* @ngInject */
-    function HomeController($scope,$routeParams ,User, Giphy) {
+    function HomeController($scope,$routeParams ,User, Giphy, Marvel) {
 
     /* --- Scope Variables --- */
 
@@ -13,11 +13,15 @@
     /* User scope variables */
     $scope.users = [];
     $scope.newUser = {};
+    $scope.newUser.gifs = [];   
 
 
-    /* Giphy scope variables  */
+    /* Gif scope variables  */
 
     $scope.gifs= [];
+
+    /* Comics scope variables */
+    $scope.comics = [];
 
     /* Flags scope variables */
 
@@ -28,7 +32,11 @@
     $scope.gifsFlag = false;
     $scope.othersFlag= false;
 
+    $scope.searchByTrendyFlag = false;
+    $scope.searchByRecentFlag = false;
+
     ////////////////////////////////
+
     /* --- Scope Functions ---*/
     /* Users */
     $scope.createUser = createUser;
@@ -36,13 +44,23 @@
     $scope.editUser = editUser;
     $scope.updateUser = updateUser;
 
-    /* Giphy */
+    /* Gif Related  */
+    $scope.searchGif = searchGif;
+   //$scope.searchByTrendy =searchByTrendy;
+    $scope.addGif = addGif;
 
- 
+    /* Comic Related */
+
+    $scope.searchComics = searchComics;
+
     /*Flags*/
     $scope.toggleDataFlag = toggleDataFlag;
     $scope.toggleGifsFlag= toggleGifsFlag;
     $scope.toggleOthersFlag = toggleOthersFlag;
+
+    $scope.toggleSearchByRecentFlag = toggleSearchByRecentFlag;
+    $scope.toggleSearchByTrendyFlag = toggleSearchByTrendyFlag;
+
 
     activate();
         ////////////////
@@ -72,6 +90,16 @@
             $scope.othersFlag= true;
         }
 
+        function toggleSearchByTrendyFlag(){
+            $scope.searchByTrendyFlag = true;
+            $scope.searchByRecentFlag = false;
+        }
+
+        function toggleSearchByRecentFlag(){
+            $scope.searchByTrendyFlag = false;
+            $scope.searchByRecentFlag = true;
+        }
+
         /* -- User related functions -- */
 
         function createUser(user){
@@ -79,6 +107,7 @@
 
             User.add(user);
             $scope.users = User.getAll();
+
             $scope.newUser = {};
 
         }
@@ -113,11 +142,62 @@
         /* - END USER FUNCTIONS - */
 
 
-        /* -- Gif Related functions -- */
+        /* -- Giphy Related functions -- */
 
         function searchGif(query){
-            $scope.gifs = Giphy.findByQuery(query);
 
+            if($scope.searchByRecentFlag){
+                Giphy.findByRecent(query).then(setGifs).catch(commFailure);
+                $scope.searchByRecentFlag = false;
+            } else {                
+                Giphy.findByTrendy(query).then(setGifs).catch(commFailure);
+                $scope.searchByTrendyFlag = false;
+
+            }
+
+        }
+
+
+        function setGifs(gifs){
+            $scope.gifs = gifs.data;
+            console.log("Gifs recibidos en controller");
+            console.log($scope.gifs);
+        }
+
+
+      
+
+        /* -- Favorite Gifs related functions -- */
+
+        function addGif(gif){
+            console.log(gif);
+            $scope.newUser.gifs.push(gif);
+            console.log($scope.newUser.gifs);
+        }
+
+        /*-- Comic related functions -- */
+
+        function searchComics(query){
+            Marvel.getComicsStartingWithQuery(query)
+                  .then(setComics)
+                  .catch(commFailure);
+
+
+
+        }
+
+
+        function setComics(comics){
+            console.log("comics received in home controller");
+            console.log(comics);
+            $scope.comics = comics.data
+
+        }
+
+        /* -- Generic Error mesages function */
+
+         function commFailure(){
+            console.error("Ha habido un error de comunicación", error);
         }
 
 

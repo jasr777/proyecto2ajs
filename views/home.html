@@ -29,7 +29,7 @@
 					<button ng-click ="toggleOthersFlag()">Otros</button>
 				</div>
 
-				<div ng-if="dataFlag">
+				<div ng-show="dataFlag">
 					<div class="form-group">
 						<label for=""> Nombre</label>
 						<input class="form-control" type="text" ng-model="newUser.name">
@@ -52,23 +52,59 @@
 
 
 
-				<div ng-if ="gifsFlag">
+				<div ng-show ="gifsFlag">
 					<h2>Gifs Favoritos</h2>
 					<!-- Gifs favoritos --> 
 					<div class="favgifs">
-						<!-- Populate with ng-repeat gif in favorite gifs -->
+						<img src="{{favgif.images.fixed_width_small.url}}" ng-repeat="favgif in newUser.gifs" alt="">
 
 					</div>
-					<input type="text" placeholder="Buscar gifs" ng-model="gifquery">
-					<p> Trending</p>
-					<p> Recents</p>
+					<input class="form-control" type="text" placeholder="Buscar gifs" ng-model="gifquery">
+					<p ng-click="toggleSearchByTrendy()">Trending</p>
+					<p ng-click="toggleSearchByRecent()"> Recents</p>
 
 					<button ng-click="searchGif(gifquery)">Buscar</button>
 					
 					<div class="searchresults">
-						<!-- Populate with ng-repeat gif in favorite gifs -->
+						<!-- TODO: Paginar gifs con los botones -->
+						
+						<div>
+						<button> < </button>	
+						</div>
+						<img ng-click ="addGif(gif)" src="{{gif.images.fixed_width_small.url}}" alt="" ng-repeat="gif in gifs" >
 
+						<div>
+							<button>></button>
+						</div>
 					</div>
+
+
+					<button ng-show="createFlag" ng-click="createUser(newUser)" class="btn btn-primary btn-lg">Crear</button>
+
+				</div>
+
+
+				<div ng-show="othersFlag">
+					<h2> Comics de Marvel favoritos </h2>
+				
+					<div class="favComics">
+
+					<!-- TODO : Ng-repeat favorite gifs -->
+					</div>
+
+					<input class="form-control" type="text" placeholder="Buscar comics que empiezan por..." ng-model="comicQuery" ng-model-options="{ debounce: 1000 }" ng-change="searchComics(comicQuery)">					
+					
+					<div class="comics">
+						
+						<!-- TODO : Ng-repeat comics received -->
+					</div>
+
+					
+
+
+
+
+
 				</div>
 			</div>
 		</div>

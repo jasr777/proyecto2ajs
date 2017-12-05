@@ -15,7 +15,10 @@
 
 		<div class="gifdata col-md-4">  
 			<h2> Gifs Favoritos</h2>
-			<!--todo : gif list -->
+
+			<div>
+				<img src="{{favgif.images.fixed_width_small.url}}" ng-repeat="favgif in user.gifs" alt="">			
+			</div>
 		</div>
 
 		<div class="comicdata col-md-4">
