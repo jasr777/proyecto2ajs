@@ -13,13 +13,15 @@
     /* User scope variables */
     $scope.users = [];
     $scope.newUser = {};
-    $scope.newUser.gifs = [];   
+    $scope.newUser.gifs = []; 
+    $scope.newUser.comics = [];  
 
 
     /* Gif scope variables  */
 
     $scope.gifs= [];
-
+    $scope.gifPageSize = 8;
+    $scope.gifCurrentPage = 0;
     /* Comics scope variables */
     $scope.comics = [];
 
@@ -32,6 +34,7 @@
     $scope.gifsFlag = false;
     $scope.othersFlag= false;
 
+    $scope.showFavGifsFlag = false;
     $scope.searchByTrendyFlag = false;
     $scope.searchByRecentFlag = false;
 
@@ -46,12 +49,13 @@
 
     /* Gif Related  */
     $scope.searchGif = searchGif;
-   //$scope.searchByTrendy =searchByTrendy;
     $scope.addGif = addGif;
+
 
     /* Comic Related */
 
     $scope.searchComics = searchComics;
+    $scope.addComic = addComic;
 
     /*Flags*/
     $scope.toggleDataFlag = toggleDataFlag;
@@ -173,6 +177,7 @@
             console.log(gif);
             $scope.newUser.gifs.push(gif);
             console.log($scope.newUser.gifs);
+            $scope.showFavGifsFlag = true;
         }
 
         /*-- Comic related functions -- */
@@ -188,16 +193,45 @@
 
 
         function setComics(comics){
-            console.log("comics received in home controller");
-            console.log(comics);
-            $scope.comics = comics.data
+            let comicsReceived = comics.data.results.splice(0);
+            console.log(comicsReceived);
+        
+            $scope.comics = formatComicsReceived(comicsReceived);
+            console.log($scope.comics);
+        }
 
+        /* formatComicsReceived formatea los comics a un formato mejor que lo que llega en la api*/
+
+        function formatComicsReceived(comics){
+            let comicsFormated = [];
+
+            for (var i = 0; i < comics.length ; i++){
+                console.log(comics[i].title);
+                let comicFormated = {};
+                comicFormated.id = comics[i].id;
+                comicFormated.characters = comics[i].characters;
+                comicFormated.image = comics[i].images;
+                comicFormated.thumbnail = comics[i].thumbnail.path +"."+ comics[i].thumbnail.extension;
+                console.log(comicFormated.thumbnail);
+                comicFormated.title = comics[i].title;
+                comicsFormated.push(comicFormated);
+            }
+            return comicsFormated;
+
+        }
+
+
+
+        function addComic(comic){
+            console.log(comic);
+            $scope.newUser.comics.push(comic);
+            console.log($scope.newUser.comics);
         }
 
         /* -- Generic Error mesages function */
 
          function commFailure(){
-            console.error("Ha habido un error de comunicación", error);
+            console.error("Ha habido un error de comunicación en HomeController");
         }
 
 
@@ -207,6 +241,9 @@
         function randId() {   
             return Math.random().toString(36).substr(2, 10);  
         }
+
+
+
 
 
 

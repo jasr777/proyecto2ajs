@@ -17,13 +17,14 @@
 			<h2> Gifs Favoritos</h2>
 
 			<div>
-				<img src="{{favgif.images.fixed_width_small.url}}" ng-repeat="favgif in user.gifs" alt="">			
+				<img src="{{favgif.images.original.url}}" ng-repeat="favgif in user.gifs" alt="">			
 			</div>
 		</div>
 
 		<div class="comicdata col-md-4">
 		 	<h2>Comics Favoritos</h2>
-		 	<!--todo : comic list -->
+
+		 	<img src="{{favcomic.thumbnail}}" ng-repeat="favcomic in user.comics" alt="">
 		</div>
 	</div>
 </div>

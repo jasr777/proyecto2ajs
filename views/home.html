@@ -55,11 +55,11 @@
 				<div ng-show ="gifsFlag">
 					<h2>Gifs Favoritos</h2>
 					<!-- Gifs favoritos --> 
-					<div class="favgifs">
-						<img src="{{favgif.images.fixed_width_small.url}}" ng-repeat="favgif in newUser.gifs" alt="">
+					<div  class="favgifs" ng-show="showFavGifsFlag">
+						<img src="{{favgif.images.fixed_width_small.url}}" ng-repeat="favgif in newUser.gifs track by favgif.id" alt="">
 
 					</div>
-					<input class="form-control" type="text" placeholder="Buscar gifs" ng-model="gifquery">
+					<input class="form-control gif-input" type="text" placeholder="Buscar gifs" ng-model="gifquery">
 					<p ng-click="toggleSearchByTrendy()">Trending</p>
 					<p ng-click="toggleSearchByRecent()"> Recents</p>
 
@@ -69,12 +69,12 @@
 						<!-- TODO: Paginar gifs con los botones -->
 						
 						<div>
-						<button> < </button>	
+						<button ng-show = "!gifCurrentPage==0" ng-click="" > < </button>	
 						</div>
-						<img ng-click ="addGif(gif)" src="{{gif.images.fixed_width_small.url}}" alt="" ng-repeat="gif in gifs" >
+						<img ng-click ="addGif(gif)" src="{{gif.images.fixed_width_small.url}}" alt="" ng-repeat="gif in gifs  |limitTo: 8" >
 
 						<div>
-							<button>></button>
+							<button ng-show="gifCurrentPage != 4" ng-click="$index+8">></button>
 						</div>
 					</div>
 
@@ -89,19 +89,20 @@
 				
 					<div class="favComics">
 
-					<!-- TODO : Ng-repeat favorite gifs -->
+						<img height=150 width =150 src="{{favcomic.thumbnail}}" ng-repeat= "favcomic in newUser.comics |limitTo:3">
+
 					</div>
 
 					<input class="form-control" type="text" placeholder="Buscar comics que empiezan por..." ng-model="comicQuery" ng-model-options="{ debounce: 1000 }" ng-change="searchComics(comicQuery)">					
 					
 					<div class="comics">
 						
-						<!-- TODO : Ng-repeat comics received -->
+						<img ng-click="addComic(comic)" src="{{comic.thumbnail}}" height=150 width=150 alt="" ng-repeat="comic in comics track by comic.id" >
 					</div>
 
 					
 
-
+						<button ng-show="createFlag" ng-click="createUser(newUser)" class="btn btn-primary btn-lg">Crear</button>
 
 
 
