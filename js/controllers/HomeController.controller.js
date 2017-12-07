@@ -23,7 +23,7 @@
     $scope.gifOffset = 0;
     /* Comics scope variables */
     $scope.comics = [];
-
+    $scope.comicsOffset = 0;
     /* Flags scope variables */
 
     $scope.editFlag =false;
@@ -38,6 +38,7 @@
     $scope.searchByRecentFlag = false;
 
     $scope.nextGifFlag = false;
+    $scope.nextComicFlag = false;
 
     /* Auxiliary variables */
 
@@ -62,6 +63,8 @@
 
     $scope.searchComics = searchComics;
     $scope.addComic = addComic;
+    $scope.nextComics = nextComics;
+    $scope.previousComics = previousComics;
 
     /*Flags*/
     $scope.toggleDataFlag = toggleDataFlag;
@@ -213,20 +216,30 @@
                   .then(setComics)
                   .catch(commFailure);
 
+        }
 
+         function nextComics(query){
+            $scope.comicsOffset= $scope.comicsOffset + 3;
+            console.log("Next Comics offset in HomeController" +$scope.comicsOffset);
+            Marvel.findByOffset(query,$scope.comicsOffset).then(setComics).catch(commFailure);
 
         }
 
+        function previousComics(query){
+            $scope.comicsOffset= $scope.comicsOffset - 3;
+            Marvel.findByOffset(query, $scope.comicsOffset).then(setComics).catch(commFailure);
+        }
 
         function setComics(comics){
             let comicsReceived = comics.data.results.splice(0);
             console.log(comicsReceived);
         
             $scope.comics = Marvel.formatComicsReceived(comicsReceived);
+            $scope.nextComicFlag = true;
             console.log($scope.comics);
         }
 
-
+      
 
         function addComic(comic){
             console.log(comic);

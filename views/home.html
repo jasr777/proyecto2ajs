@@ -66,8 +66,6 @@
 					<button ng-click="searchGif(gifquery)">Buscar</button>
 					
 					<div class="searchresults">
-						<!-- TODO: Paginar gifs con los botones -->
-						<!-- Los botones vuelven a hacer una llamada a la api pidiendo los siguientes 8, usar el objeto de paginacion que tiene los datos recibidos de giphy -->
 						<div>
 						<button ng-show="gifOffset > 0" ng-click="previousGifs(gifquery)"> < </button>	
 						</div>
@@ -89,15 +87,19 @@
 				
 					<div class="favComics">
 
-						<img height=150 width =150 src="{{favcomic.thumbnail}}" ng-repeat= "favcomic in newUser.comics |limitTo:3">
+						<img height=150 width =150 src="{{favcomic.thumbnail}}" ng-repeat= "favcomic in newUser.comics">
 
 					</div>
 
 					<input class="form-control" type="text" placeholder="Buscar comics que empiezan por..." ng-model="comicQuery" ng-model-options="{ debounce: 1000 }" ng-change="searchComics(comicQuery)">					
 					
 					<div class="comics">
-						
+						<button ng-show ="comicsOffset > 0" ng-click="previousComics(comicQuery)"> < </button>	
+
 						<img ng-click="addComic(comic)" src="{{comic.thumbnail}}" height=150 width=150 alt="" ng-repeat="comic in comics track by comic.id" >
+						<button ng-show="nextComicFlag" ng-click="nextComics(comicQuery)"> > </button>
+
+
 					</div>
 
 					
