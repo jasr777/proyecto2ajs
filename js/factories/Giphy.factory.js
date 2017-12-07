@@ -16,8 +16,7 @@
         var offsetStr = "&offset=";
         var service = {
           //  findByQuery: findByQuery,
-            findByTrendy : findByTrendy,
-            findByRecent : findByRecent,
+            find : find,
             findByOffset : findByOffset,
             parseGifsList : parseGifsList
         };
@@ -34,7 +33,7 @@
 
 
 
-        function findByRecent(query){
+        function find(query){
         	return $http.get(giphyUrl+query+apiKey+limit)
         	.then(setGifsByRecent)
         	.catch(commFailure);
@@ -59,10 +58,11 @@
 
         }
 
-        function parseGifsList(gifs){
+        function parseGifsList(gifs, flag){
 
             let gifsListWithDateParsed = [];
-
+            console.log("list of gifs to parse");
+            console.log(gifs);
 
             for (var i = 0; i < gifs.length; i ++){
                 let parsedGif = {};
@@ -77,12 +77,27 @@
                 parsedGif.import_datetetime = Date.parse(gifs[i].import_datetime);
                 parsedGif.trending_datetime = Date.parse(gifs[i].trending_datetime);
                 parsedGif.images = gifs[i].images;
-                parsedGif.title = gifs[i].title;              
+                parsedGif.title = gifs[i].title;  
+                console.log("parsed gif : ");
+                console.log(parsedGif);            
                 gifsListWithDateParsed.push(parsedGif);
+                console.log("gifs parsed : ");
+                console.log(gifsListWithDateParsed);
             }
 
+            // flag == true => sort by recent
+            // flag == false ==> sort by trendy
+            if (flag){
+                console.log("returning gifs sorted by recent");
+                let recents = sortGifsByRecent(gifsListWithDateParsed).reverse();
+                return recents;
+            } else {
+                console.log("returning gifs sorted by trendy");
+                let trendy  = sortGifsByTrendy(gifsListWithDateParsed).reverse();
+                console.log(trendy);
+                return trendy;
+            }
 
-            return sortGifsByRecent(gifsListWithDateParsed).reverse();
         }
 
         function sortGifsByRecent (gifs){
@@ -90,6 +105,16 @@
             return gifs.sort( (a , b) => {
                 var parsedA = a.import_datetime;
                 var parsedB = b.import_datetime;
+                return parsedA - parsedB;
+            })
+        }
+
+        function sortGifsByTrendy (gifs){
+             console.log("sorting gifs by trendy");
+             console.log(gifs);
+            return gifs.sort( (a , b) => {
+                var parsedA = a.trending_datetime;
+                var parsedB = b.trending_datetime;
                 return parsedA - parsedB;
             })
         }

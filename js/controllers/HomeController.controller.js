@@ -162,13 +162,12 @@
         /* -- Giphy Related functions -- */
 
         function searchGif(query){
-
             if($scope.searchByRecentFlag && !$scope.searchByTrendyFlag){
                 console.log("find by recent");
-                Giphy.findByRecent(query).then(setGifs).catch(commFailure);
+                Giphy.find(query).then(setGifs).catch(commFailure);
             } else {                
                 console.log("find by trendy");
-                Giphy.findByTrendy(query).then(setGifs).catch(commFailure);
+                Giphy.find(query).then(setGifs).catch(commFailure);
             }
 
         }
@@ -193,12 +192,15 @@
             console.log(gifsReceived);
             if ( $scope.searchByRecentFlag){
                 console.log("Search by recents ");
-                $scope.gifs = Giphy.parseGifsList(gifsReceived);
-                console.log("$scope.gifs after sorting");
+                $scope.gifs = Giphy.parseGifsList(gifsReceived,true);
+                console.log("$scope.gifs after sort by recent");
                 console.log($scope.gifs);
                 
-            } else {
-                $scope.gifs = gifs.data;
+            } else{
+                    console.log("Search by trendy");
+                    $scope.gifs = Giphy.parseGifsList(gifsReceived, false);
+                    console.log("$scope.gifs after sort by trendy");
+                    console.log($scope.gifs);
             }
             $scope.nextGifFlag = true;
             console.log($scope.gifs);
