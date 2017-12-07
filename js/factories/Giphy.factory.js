@@ -18,7 +18,8 @@
           //  findByQuery: findByQuery,
             findByTrendy : findByTrendy,
             findByRecent : findByRecent,
-            findByOffset : findByOffset
+            findByOffset : findByOffset,
+            parseGifsList : parseGifsList
         };
         return service;
         ////////////////
@@ -58,6 +59,40 @@
 
         }
 
+        function parseGifsList(gifs){
+
+            let gifsListWithDateParsed = [];
+
+
+            for (var i = 0; i < gifs.length; i ++){
+                let parsedGif = {};
+                parsedGif.type = gifs[i].type;
+                parsedGif.id = gifs[i].id;
+                parsedGif.url = gifs[i].url;
+                parsedGif.username = gifs[i].username;
+                parsedGif.rating = gifs[i].rating;
+                parsedGif.user = gifs[i].user;
+                parsedGif.updateDateTime = gifs[i].update_datetime;
+                parsedGif.create_datetime = gifs[i].create_datetime;
+                parsedGif.import_datetetime = Date.parse(gifs[i].import_datetime);
+                parsedGif.trending_datetime = Date.parse(gifs[i].trending_datetime);
+                parsedGif.images = gifs[i].images;
+                parsedGif.title = gifs[i].title;              
+                gifsListWithDateParsed.push(parsedGif);
+            }
+
+
+            return sortGifsByRecent(gifsListWithDateParsed).reverse();
+        }
+
+        function sortGifsByRecent (gifs){
+            console.log("sorting gifs by recents");
+            return gifs.sort( (a , b) => {
+                var parsedA = a.import_datetime;
+                var parsedB = b.import_datetime;
+                return parsedA - parsedB;
+            })
+        }
 
 
         function findByTrendy(query){

@@ -114,6 +114,7 @@
             console.log("search by recent flag on")
             $scope.searchByTrendyFlag = false;
             $scope.searchByRecentFlag = true;
+            console.log("search by recent is " + $scope.searchByRecentFlag);
         }
 
         /* -- User related functions -- */
@@ -162,16 +163,12 @@
 
         function searchGif(query){
 
-
             if($scope.searchByRecentFlag && !$scope.searchByTrendyFlag){
                 console.log("find by recent");
                 Giphy.findByRecent(query).then(setGifs).catch(commFailure);
-                $scope.searchByRecentFlag = false;
             } else {                
                 console.log("find by trendy");
                 Giphy.findByTrendy(query).then(setGifs).catch(commFailure);
-                $scope.searchByTrendyFlag = false;
-
             }
 
         }
@@ -191,9 +188,19 @@
 
 
         function setGifs(gifs){
-            $scope.gifs = gifs.data;
+            let gifsReceived = gifs.data.splice(0);
+            console.log("Gifs received in HomeController before parsing ");
+            console.log(gifsReceived);
+            if ( $scope.searchByRecentFlag){
+                console.log("Search by recents ");
+                $scope.gifs = Giphy.parseGifsList(gifsReceived);
+                console.log("$scope.gifs after sorting");
+                console.log($scope.gifs);
+                
+            } else {
+                $scope.gifs = gifs.data;
+            }
             $scope.nextGifFlag = true;
-            console.log("Gifs recibidos en controller");
             console.log($scope.gifs);
         }
 
