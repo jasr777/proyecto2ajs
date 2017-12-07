@@ -13,10 +13,12 @@
     	var giphyTrendyUrl = "http://api.giphy.com/v1/gifs/trending?"
     	var apiKey = "&api_key=1jzBaAlq9VPdPxLSh1hOuuNKS6xbdBql";
     	var limit = "&limit=8";
+        var offsetStr = "&offset=";
         var service = {
           //  findByQuery: findByQuery,
             findByTrendy : findByTrendy,
             findByRecent : findByRecent,
+            findByOffset : findByOffset
         };
         return service;
         ////////////////
@@ -32,17 +34,27 @@
 
 
         function findByRecent(query){
-        	return $http.get(giphyUrl+query+apiKey)
+        	return $http.get(giphyUrl+query+apiKey+limit)
         	.then(setGifsByRecent)
         	.catch(commFailure);
 
         }
 
 
-        function setGifsByRecent(response){
-        	let gifsByDate = response.data;
 
-        	// TODO : sory by recent
+        function findByOffset(query,offset){
+
+            return $http.get(giphyUrl+query+apiKey+limit+offsetStr+offset)
+                   .then(setGifsByRecent).catch(commFailure);
+        }
+
+
+ 
+
+        function setGifsByRecent(response){
+            console.log(response.data);
+            return response.data;
+        	// TODO : sort by recent
 
         }
 

@@ -60,21 +60,21 @@
 
 					</div>
 					<input class="form-control gif-input" type="text" placeholder="Buscar gifs" ng-model="gifquery">
-					<p ng-click="toggleSearchByTrendy()">Trending</p>
-					<p ng-click="toggleSearchByRecent()"> Recents</p>
+					<button ng-click="toggleSearchByTrendyFlag()">Trending</button>
+					<button ng-click="toggleSearchByRecentFlag()"> Recents</button>
 
 					<button ng-click="searchGif(gifquery)">Buscar</button>
 					
 					<div class="searchresults">
 						<!-- TODO: Paginar gifs con los botones -->
-						
+						<!-- Los botones vuelven a hacer una llamada a la api pidiendo los siguientes 8, usar el objeto de paginacion que tiene los datos recibidos de giphy -->
 						<div>
-						<button ng-show = "!gifCurrentPage==0" ng-click="" > < </button>	
+						<button ng-show="gifOffset > 0" ng-click="previousGifs(gifquery)"> < </button>	
 						</div>
-						<img ng-click ="addGif(gif)" src="{{gif.images.fixed_width_small.url}}" alt="" ng-repeat="gif in gifs  |limitTo: 8" >
+						<img  ng-click ="addGif(gif)" src="{{gif.images.fixed_width_small.url}}" alt="" ng-repeat="gif in gifs  track by gif.id" >
 
 						<div>
-							<button ng-show="gifCurrentPage != 4" ng-click="$index+8">></button>
+							<button ng-show="nextGifFlag" ng-click="nextGifs(gifquery)" >></button>
 						</div>
 					</div>
 

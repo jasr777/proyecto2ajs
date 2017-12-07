@@ -20,8 +20,7 @@
     /* Gif scope variables  */
 
     $scope.gifs= [];
-    $scope.gifPageSize = 8;
-    $scope.gifCurrentPage = 0;
+    $scope.gifOffset = 0;
     /* Comics scope variables */
     $scope.comics = [];
 
@@ -38,6 +37,12 @@
     $scope.searchByTrendyFlag = false;
     $scope.searchByRecentFlag = false;
 
+    $scope.nextGifFlag = false;
+
+    /* Auxiliary variables */
+
+    
+
     ////////////////////////////////
 
     /* --- Scope Functions ---*/
@@ -50,7 +55,8 @@
     /* Gif Related  */
     $scope.searchGif = searchGif;
     $scope.addGif = addGif;
-
+    $scope.nextGifs = nextGifs;
+    $scope.previousGifs = previousGifs;
 
     /* Comic Related */
 
@@ -95,11 +101,14 @@
         }
 
         function toggleSearchByTrendyFlag(){
+            console.log("search by trendy flag on")
+
             $scope.searchByTrendyFlag = true;
             $scope.searchByRecentFlag = false;
         }
 
         function toggleSearchByRecentFlag(){
+            console.log("search by recent flag on")
             $scope.searchByTrendyFlag = false;
             $scope.searchByRecentFlag = true;
         }
@@ -150,10 +159,13 @@
 
         function searchGif(query){
 
-            if($scope.searchByRecentFlag){
+
+            if($scope.searchByRecentFlag && !$scope.searchByTrendyFlag){
+                console.log("find by recent");
                 Giphy.findByRecent(query).then(setGifs).catch(commFailure);
                 $scope.searchByRecentFlag = false;
             } else {                
+                console.log("find by trendy");
                 Giphy.findByTrendy(query).then(setGifs).catch(commFailure);
                 $scope.searchByTrendyFlag = false;
 
@@ -161,9 +173,23 @@
 
         }
 
+        function nextGifs(query){
+            $scope.gifOffset = $scope.gifOffset + 8;
+            console.log("NextGifs offset : " + $scope.gifOffset);
+            
+            Giphy.findByOffset(query,$scope.gifOffset).then(setGifs).catch(commFailure);
+        }
+
+        function previousGifs(query){
+            $scope.gifOffset = $scope.gifOffset - 8;
+            console.log("Previous gifs ofset : " + $scope.gifOffset);
+            Giphy.findByOffset(query,$scope.gifOffset).then(setGifs).catch(commFailure);
+        }
+
 
         function setGifs(gifs){
             $scope.gifs = gifs.data;
+            $scope.nextGifFlag = true;
             console.log("Gifs recibidos en controller");
             console.log($scope.gifs);
         }
@@ -196,28 +222,8 @@
             let comicsReceived = comics.data.results.splice(0);
             console.log(comicsReceived);
         
-            $scope.comics = formatComicsReceived(comicsReceived);
+            $scope.comics = Marvel.formatComicsReceived(comicsReceived);
             console.log($scope.comics);
-        }
-
-        /* formatComicsReceived formatea los comics a un formato mejor que lo que llega en la api*/
-
-        function formatComicsReceived(comics){
-            let comicsFormated = [];
-
-            for (var i = 0; i < comics.length ; i++){
-                console.log(comics[i].title);
-                let comicFormated = {};
-                comicFormated.id = comics[i].id;
-                comicFormated.characters = comics[i].characters;
-                comicFormated.image = comics[i].images;
-                comicFormated.thumbnail = comics[i].thumbnail.path +"."+ comics[i].thumbnail.extension;
-                console.log(comicFormated.thumbnail);
-                comicFormated.title = comics[i].title;
-                comicsFormated.push(comicFormated);
-            }
-            return comicsFormated;
-
         }
 
 
