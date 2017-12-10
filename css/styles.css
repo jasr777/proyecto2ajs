@@ -1,26 +1,94 @@
-.userlist{
-	background-color : #42f4b0;
+h1 {
+    text-transform: uppercase;
+    font-size: 36px;
+    font-weight: bold;
+}
 
+body {
+    background-color:#eee;
+}
+a {
+    text-decoration: none;
+    color : #000;
+}
+
+.userlist{
+	height:100%;
 	border : 1px solid #000;
 }
 
 .user {
 	margin:10px;
-	background-color : #42f4aa;
-	
+	background-color : #b0c5e8;
+    width:354px;
+    height:200px;
+    border: 2px solid #333;
+    
 	
 }
+#title {
+    font-weight: bold;
+    color:#565d68;
+    
+}
+.userdata {
+    margin : 10px 0px 0px 45px;
+    font-size : 1.2em;
+    
+}
+.user img{
+    width:120px;
+    height:120px;
+    margin-top:10px;
+    border-radius:10%;
+    border: 3px solid #fff;
+}
 
+.botonera i{
+    padding:
+}
+.botonera button{
+    background : none;
+    border : none;
+}
 .userForm{
-	border-left : 1px solid #000;
+	border : 2px solid #000;
 	background-color : #397a55;
-	color : #fff;
-	
+	color : #fff;	
 
 }
 
-button {
-	color:#000;
+.buffer {
+    margin:15px;
+}
+.tabs{
+    
+    
+    
+}
+
+#data:focus{
+        background-color:#27442d;
+
+}
+
+#gifs:focus{
+        background-color:#27442d;
+}
+
+#others:focus{
+        background-color:#27442d;
+
+}
+.tabs button{
+    color:#fff;
+    background:none;
+    border : none;
+    padding:9px;
+}
+#create{
+    background-color:#112d03;
+    padding: 10px 50px 10px 50px;
 }
 
 .searchResults img {
