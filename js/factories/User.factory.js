@@ -45,7 +45,7 @@
 
         function add(user){
         	
-        	var before = getAll();
+        	var before = getAll();            
         	before.push(user);
         	localStorage.setItem('users',JSON.stringify(before));
 

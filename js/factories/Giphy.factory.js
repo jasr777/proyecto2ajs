@@ -15,7 +15,6 @@
     	var limit = "&limit=8";
         var offsetStr = "&offset=";
         var service = {
-          //  findByQuery: findByQuery,
             find : find,
             findByOffset : findByOffset,
             parseGifsList : parseGifsList

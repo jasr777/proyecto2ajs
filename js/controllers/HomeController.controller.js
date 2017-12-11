@@ -35,10 +35,16 @@
 
     $scope.showFavGifsFlag = false;
     $scope.searchByTrendyFlag = false;
-    $scope.searchByRecentFlag = false;
-
+    $scope.searchByRecentFlag = true;
+    $scope.hiddenBlockFlag =true;   
     $scope.nextGifFlag = false;
+    
+
+    $scope.showFavComicsFlag = false;
     $scope.nextComicFlag = false;
+
+    $scope.hasComics = false;
+
 
     /* Auxiliary variables */
 
@@ -52,6 +58,8 @@
     $scope.removeUser = removeUser;
     $scope.editUser = editUser;
     $scope.updateUser = updateUser;
+
+
 
     /* Gif Related  */
     $scope.searchGif = searchGif;
@@ -73,6 +81,8 @@
 
     $scope.toggleSearchByRecentFlag = toggleSearchByRecentFlag;
     $scope.toggleSearchByTrendyFlag = toggleSearchByTrendyFlag;
+
+    $scope.searchResults = false;
 
 
     activate();
@@ -126,6 +136,12 @@
             $scope.users = User.getAll();
 
             $scope.newUser = {};
+            $scope.showFavComicsFlag = false;
+            $scope.showFavGifsFlag = false;
+            $scope.gifs = [];
+            $scope.comics = [];
+            $scope.searchResults = false;
+
 
         }
 
@@ -148,8 +164,6 @@
         }
 
         function updateUser(user){
-            console.log("update user en controller");
-            console.log(user);
             User.update(user);
             $scope.users = User.getAll();
             $scope.editFlag = false;
@@ -162,48 +176,46 @@
         /* -- Giphy Related functions -- */
 
         function searchGif(query){
+            $scope.searchResults = true;
+
             if($scope.searchByRecentFlag && !$scope.searchByTrendyFlag){
-                console.log("find by recent");
+
                 Giphy.find(query).then(setGifs).catch(commFailure);
             } else {                
-                console.log("find by trendy");
                 Giphy.find(query).then(setGifs).catch(commFailure);
             }
 
         }
 
         function nextGifs(query){
-            $scope.gifOffset = $scope.gifOffset + 8;
-            console.log("NextGifs offset : " + $scope.gifOffset);
-            
+            $scope.gifOffset = $scope.gifOffset + 8;           
             Giphy.findByOffset(query,$scope.gifOffset).then(setGifs).catch(commFailure);
+            $scope.hiddenBlockFlag = false;
         }
 
         function previousGifs(query){
             $scope.gifOffset = $scope.gifOffset - 8;
-            console.log("Previous gifs ofset : " + $scope.gifOffset);
             Giphy.findByOffset(query,$scope.gifOffset).then(setGifs).catch(commFailure);
+            
         }
 
 
         function setGifs(gifs){
             let gifsReceived = gifs.data.splice(0);
-            console.log("Gifs received in HomeController before parsing ");
-            console.log(gifsReceived);
-            if ( $scope.searchByRecentFlag){
-                console.log("Search by recents ");
-                $scope.gifs = Giphy.parseGifsList(gifsReceived,true);
-                console.log("$scope.gifs after sort by recent");
-                console.log($scope.gifs);
-                
-            } else{
-                    console.log("Search by trendy");
-                    $scope.gifs = Giphy.parseGifsList(gifsReceived, false);
-                    console.log("$scope.gifs after sort by trendy");
+            if($scope.gifOffset < gifs.pagination.total_count){
+                console.log($scope.gifOffset + "  " + gifs.pagination.total_count);
+                if ( $scope.searchByRecentFlag){
+                    $scope.gifs = Giphy.parseGifsList(gifsReceived,true);
                     console.log($scope.gifs);
+                } else{
+                    $scope.gifs = Giphy.parseGifsList(gifsReceived, false);
+                }
+             $scope.nextGifFlag = true;
+
+            } else {
+                console.log("llego al limite");
+                $scope.nextGifFlag = false;
             }
-            $scope.nextGifFlag = true;
-            console.log($scope.gifs);
         }
 
 
@@ -212,15 +224,18 @@
         /* -- Favorite Gifs related functions -- */
 
         function addGif(gif){
-            console.log(gif);
             $scope.newUser.gifs.push(gif);
-            console.log($scope.newUser.gifs);
             $scope.showFavGifsFlag = true;
         }
 
         /*-- Comic related functions -- */
 
         function searchComics(query){
+                $scope.searchResults = true;
+
+            // Cuando se busca reseteamos el offset.
+
+            $scope.comicsOffset = 0;
             Marvel.getComicsStartingWithQuery(query)
                   .then(setComics)
                   .catch(commFailure);
@@ -229,9 +244,8 @@
 
          function nextComics(query){
             $scope.comicsOffset= $scope.comicsOffset + 3;
-            console.log("Next Comics offset in HomeController" +$scope.comicsOffset);
             Marvel.findByOffset(query,$scope.comicsOffset).then(setComics).catch(commFailure);
-
+            $scope.hiddenBlockFlag = false;
         }
 
         function previousComics(query){
@@ -241,19 +255,26 @@
 
         function setComics(comics){
             let comicsReceived = comics.data.results.splice(0);
-            console.log(comicsReceived);
-        
-            $scope.comics = Marvel.formatComicsReceived(comicsReceived);
-            $scope.nextComicFlag = true;
-            console.log($scope.comics);
-        }
+            if(comicsReceived.length != 0){
+                $scope.hasComics = true;
+                if($scope.comicsOffset <= comics.data.total){
+            
+                    $scope.comics = Marvel.formatComicsReceived(comicsReceived);
+                    $scope.nextComicFlag = true;
+                } else {
+                    console.log("no hay mas comics");
+                    $scope.nextComicFlag = false;
+                }
+            } else {
+                $scope.hasComics = false;
+            }
+        }   
 
       
 
         function addComic(comic){
-            console.log(comic);
             $scope.newUser.comics.push(comic);
-            console.log($scope.newUser.comics);
+            $scope.showFavComicsFlag = true;
         }
 
         /* -- Generic Error mesages function */

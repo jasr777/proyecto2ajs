@@ -15,23 +15,29 @@
                 </div>
 
             <div ng-show="dataFlag">
-                <div class="form-group">
-                    <label for=""> Nombre</label>
-                    <input class="form-control" type="text" ng-model="newUser.name">
-                </div>
-                <div class="form-group">
-                    <label for=""> Email</label>
-                    <input class="form-control" type="email" ng-model="newUser.mail">
-                </div>
-                <div class="form-group">
-                    <label for=""> Teléfono</label>
-                    <input class="form-control" type="text" ng-model="newUser.phone">
-                </div>
-                <div class="form-group">
-                    <label for=""> Foto</label>
-                    <input class="form-control" type="text" ng-model="newUser.photo">
-                </div>
-                <button ng-show="editFlag" class="btn btn-primary btn-lg" ng-click="updateUser(newUser)"> Modificar</button>
+                <form name="userData" novalidate>
+                    <div class="form-group">
+                        <label for=""> Nombre</label>
+                        <input  name="username" ng-required="true" class="form-control" type="text" ng-model="newUser.name">
+                        <small ng-show="userData.username.$touched && userData.username.$invalid"> Por favor, introduce el nombre</small>
+                    </div>
+                    <div class="form-group">
+                        <label for=""> Email</label>
+                        <input name="mail" ng-required="true" class="form-control" type="email" ng-model="newUser.mail">
+                        <small ng-show="userData.mail.$touched && userData.mail.$invalid"> Por favor, introduce un correo electrónico válido</small>
+                    </div>
+                    <div class="form-group">
+                        <label for=""> Teléfono</label>
+                        <input name="phone" ng-required="true"class="form-control" ng-minlength="9" ng-maxlength="9"type="text" ng-model="newUser.phone">
+                        <small ng-show="userData.phone.$touched && userData.phone.$invalid"> Por favor introduce un número de teléfono válido</small>
+                    </div>
+                    <div class="form-group">
+                        <label for=""> Foto</label>
+                        <input class="form-control" type="text" ng-model="newUser.photo">
+                        <small>Para imagen por defecto dejar vacío</small>
+                    </div>
+                    <button ng-show="editFlag" class="btn btn-primary btn-lg" ng-click="updateUser(newUser)"> Modificar</button>
+                </form>
             </div>
 
 
@@ -39,62 +45,70 @@
             <div ng-show="gifsFlag">
                 <h2>Gifs Favoritos</h2>
                 <!-- Gifs favoritos -->
-                <div class="favgifs" ng-show="showFavGifsFlag">
-                    <img src="{{favgif.images.fixed_width_small.url}}" ng-repeat="favgif in newUser.gifs track by favgif.id" alt="">
+                <div class="favs" ng-show="showFavGifsFlag">
+                    <img  class="favorite-item gif" src="{{favgif.images.fixed_width_small.url}}" ng-repeat="favgif in newUser.gifs track by favgif.id" alt="">
 
+                </div>
+                <div class="row">
+                  <div class="botonera col-md-offset-7">
+                    <button ng-click="toggleSearchByTrendyFlag()" ng-class="{'underline' : searchByTrendyFlag}">Trending</button>
+                    <p class="separator">|</p>
+                    <button ng-click="toggleSearchByRecentFlag()" ng-class="{'underline' : searchByRecentFlag}"> Recents</button>
+                </div>
                 </div>
                 <input class="form-control gif-input" type="text" placeholder="Buscar gifs" ng-model="gifquery">
-                <div class="botonera">
-                <button ng-click="toggleSearchByTrendyFlag()">Trending</button>
-                <button ng-click="toggleSearchByRecentFlag()"> Recents</button>
+                <div class="buffer"></div>
 
-                <button ng-click="searchGif(gifquery)">Buscar</button>
+                <div class="row">
+                <button class="col-md-offset-9 btn btn-primary btn-bg-dark" ng-click="searchGif(gifquery)">Buscar</button>
                 </div>
 
-                <div class="searchresults">
-                    <div>
-                        <button ng-show="gifOffset > 0" ng-click="previousGifs(gifquery)"> < </button>
-                    </div>
-                    <img ng-click="addGif(gif)" src="{{gif.images.fixed_width_small.url}}" alt="" ng-repeat="gif in gifs  track by gif.id">
+                <div class="searchresults" ng-show="searchResults">
+                    <div class="row">
+                        <div ng-show="hiddenBlockFlag || gifOffset == 0" class="col-md-2 "></div>
+                        <button class="arrow-button col-md-2 center-arrow" ng-show="gifOffset > 0" ng-click="previousGifs(gifquery)"> <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                        </button>
+                       
+                        <div class="search-results  col-md-8">
+                            <img class="gif" ng-click="addGif(gif)" src="{{gif.images.fixed_width_small.url}}" alt="" ng-repeat="gif in gifs  track by gif.id">
+                        </div>
 
-                    <div>
-                        <button ng-show="nextGifFlag" ng-click="nextGifs(gifquery)">></button>
-                    </div>
+                        <button class="arrow-button col-md-2 center-arrow" ng-show="nextGifFlag " ng-click="nextGifs(gifquery)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                        </button>
+                     </div>
                 </div>
-
-
-
             </div>
 
 
             <div ng-show="othersFlag">
                 <h2> Comics de Marvel favoritos </h2>
 
-                <div class="favComics">
+                <div class="favs fav-comics" ng-show="showFavComicsFlag">
 
-                    <img height=150 width=150 src="{{favcomic.thumbnail}}" ng-repeat="favcomic in newUser.comics">
+                    <img class="comic favorite-item" height=150 width=150 src="{{favcomic.thumbnail}}" ng-repeat="favcomic in newUser.comics">
 
                 </div>
 
                 <input class="form-control" type="text" placeholder="Buscar comics que empiezan por..." ng-model="comicQuery" ng-model-options="{ debounce: 1000 }" ng-change="searchComics(comicQuery)">
-
-                <div class="comics">
-                    <button ng-show="comicsOffset > 0" ng-click="previousComics(comicQuery)"> < </button>
-
-                    <img ng-click="addComic(comic)" src="{{comic.thumbnail}}" height=150 width=150 alt="" ng-repeat="comic in comics track by comic.id">
-                    <button ng-show="nextComicFlag" ng-click="nextComics(comicQuery)"> > </button>
-
-
+                <div class="buffer"></div>
+                <div class="searchresults" ng-show="hasComics && searchResults">
+                    <div class="row">
+                        <div ng-show="hiddenBlockFlag || comicsOffset == 0" class="col-md-2"></div>                        
+                        <button ng-show="comicsOffset > 0" ng-click="previousComics(comicQuery)" class="arrow-button center-arrow col-md-2"> <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> </button>
+                        <div class="search-results col-md-8">
+                            <img class="comic" ng-click="addComic(comic)" src="{{comic.thumbnail}}" height=150 width=150 alt="" ng-repeat="comic in comics track by comic.id">
+                        </div>  
+                       
+                        <button class="arrow-button center-arrow col-md-2" ng-show="nextComicFlag" ng-click="nextComics(comicQuery)"> <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </button>
+                    </div>
+    
                 </div>
 
-
-
-
-
-
             </div>
-                            <button ng-show="createFlag" ng-click="createUser(newUser)" id="create" class="btn btn-primary btn-lg">Crear</button>
-
+            <div class="buffer"></div>
+            <div class="row">
+            <button ng-disabled="userData.$invalid && !showFavGifsFlag && !showFavComicsFlag " ng-show="createFlag" ng-click="createUser(newUser)" id="create" class="btn btn-primary btn-lg col-md-offset-7">Crear</button>
+            </div>
         </div>
 
 
