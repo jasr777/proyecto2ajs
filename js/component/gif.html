@@ -1,0 +1,36 @@
+ <h2>Gifs Favoritos</h2>
+                <!-- Gifs favoritos -->
+                <!-- REFACTORIZAR PARA COMPONENTE --> 
+                <div class="favs" ng-show="gifComponent.showFavGifsFlag">
+                    <img  class="favorite-item gif" src="{{favgif.images.fixed_width_small.url}}" ng-repeat="favgif in gifComponent.arrayGifs track by favgif.id" alt="">
+
+                </div>
+                <div class="row">
+                  <div class="botonera col-md-offset-7">
+                    <button ng-click="gifComponent.toggleSearchByTrendyFlag()" ng-class="{'underline' : gifComponent.searchByTrendyFlag}">Trending</button>
+                    <p class="separator">|</p>
+                    <button ng-click="gifComponent.toggleSearchByRecentFlag()" ng-class="{'underline' : gifComponent.searchByRecentFlag}"> Recents</button>
+                </div>
+                </div>
+                <input class="form-control gif-input" type="text" placeholder="Buscar gifs" ng-model="gifquery">
+                <div class="buffer"></div>
+
+                <div class="row">
+                <button class="col-md-offset-9 btn btn-primary btn-bg-dark" ng-click="gifComponent.searchGif(gifquery)">Buscar</button>
+                </div>
+
+                <div class="searchresults" ng-show="searchResults">
+                    <div class="row">
+                        <div ng-show="gifComponent.hiddenBlockFlag || gifComponent.gifOffset == 0" class="col-md-2 "></div>
+                        <button class="arrow-button col-md-2 center-arrow" ng-show="gifComponent.gifOffset > 0" ng-click="gifComponent.previousGifs(gifquery)"> <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                        </button>
+                       
+                        <div class="search-results  col-md-8">
+                            <img class="gif" ng-click="gifComponent.addGif(gif)" src="{{gif.images.fixed_width_small.url}}" alt="" ng-repeat="gif in gifComponent.gifs  track by gif.id">
+                        </div>
+
+                        <button class="arrow-button col-md-2 center-arrow" ng-show="gifComponent.nextGifFlag " ng-click="gifComponent.nextGifs(gifquery)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                        </button>
+                     </div>
+                </div>
+            </div>
