@@ -80,35 +80,21 @@
             </div>
 
 
-            <div ng-show="othersFlag">
-                <h2> Comics de Marvel favoritos </h2>
+            <div ng-show="othersFlag">  
 
-                <div class="favs fav-comics" ng-show="showFavComicsFlag">
 
-                    <img class="comic favorite-item" height=150 width=150 src="{{favcomic.thumbnail}}" ng-repeat="favcomic in newUser.comics">
 
-                </div>
 
-                <input class="form-control" type="text" placeholder="Buscar comics que empiezan por..." ng-model="comicQuery" ng-model-options="{ debounce: 1000 }" ng-change="searchComics(comicQuery)">
-                <div class="buffer"></div>
-                <div class="searchresults" ng-show="hasComics && searchResults">
-                    <div class="row">
-                        <div ng-show="hiddenBlockFlag || comicsOffset == 0" class="col-md-2"></div>                        
-                        <button ng-show="comicsOffset > 0" ng-click="previousComics(comicQuery)" class="arrow-button center-arrow col-md-2"> <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> </button>
-                        <div class="search-results col-md-8">
-                            <img class="comic" ng-click="addComic(comic)" src="{{comic.thumbnail}}" height=150 width=150 alt="" ng-repeat="comic in comics track by comic.id">
-                        </div>  
-                       
-                        <button class="arrow-button center-arrow col-md-2" ng-show="nextComicFlag" ng-click="nextComics(comicQuery)"> <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </button>
-                    </div>
-    
-                </div>
 
+                <comic  array-comics ="newUser.comics"> </comic>
+
+                
+
+
+
+          
             </div>
-            <div class="buffer"></div>
-            <div class="row">
-            <button ng-disabled="userData.$invalid && !showFavGifsFlag && !showFavComicsFlag " ng-show="createFlag" ng-click="createUser(newUser)" id="create" class="btn btn-primary btn-lg col-md-offset-7">Crear</button>
-            </div>
+              <button ng-disabled="userData.$invalid && !showFavGifsFlag && !showFavComicsFlag " ng-show="createFlag" ng-click="createUser(newUser)" id="create" class="btn btn-primary btn-lg col-md-offset-7">Crear</button>
         </div>
 
 

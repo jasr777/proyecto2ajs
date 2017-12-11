@@ -1,4 +1,4 @@
-(function() {
+    (function() {
     'use strict';
     angular
         .module('GeekAgenda')
@@ -39,12 +39,12 @@
     $scope.hiddenBlockFlag =true;   
     $scope.nextGifFlag = false;
     
-
+/*
     $scope.showFavComicsFlag = false;
     $scope.nextComicFlag = false;
 
     $scope.hasComics = false;
-
+*/
 
     /* Auxiliary variables */
 
@@ -68,11 +68,6 @@
     $scope.previousGifs = previousGifs;
 
     /* Comic Related */
-
-    $scope.searchComics = searchComics;
-    $scope.addComic = addComic;
-    $scope.nextComics = nextComics;
-    $scope.previousComics = previousComics;
 
     /*Flags*/
     $scope.toggleDataFlag = toggleDataFlag;
@@ -185,6 +180,7 @@
                 Giphy.find(query).then(setGifs).catch(commFailure);
             }
 
+
         }
 
         function nextGifs(query){
@@ -228,55 +224,7 @@
             $scope.showFavGifsFlag = true;
         }
 
-        /*-- Comic related functions -- */
-
-        function searchComics(query){
-                $scope.searchResults = true;
-
-            // Cuando se busca reseteamos el offset.
-
-            $scope.comicsOffset = 0;
-            Marvel.getComicsStartingWithQuery(query)
-                  .then(setComics)
-                  .catch(commFailure);
-
-        }
-
-         function nextComics(query){
-            $scope.comicsOffset= $scope.comicsOffset + 3;
-            Marvel.findByOffset(query,$scope.comicsOffset).then(setComics).catch(commFailure);
-            $scope.hiddenBlockFlag = false;
-        }
-
-        function previousComics(query){
-            $scope.comicsOffset= $scope.comicsOffset - 3;
-            Marvel.findByOffset(query, $scope.comicsOffset).then(setComics).catch(commFailure);
-        }
-
-        function setComics(comics){
-            let comicsReceived = comics.data.results.splice(0);
-            if(comicsReceived.length != 0){
-                $scope.hasComics = true;
-                if($scope.comicsOffset <= comics.data.total){
-            
-                    $scope.comics = Marvel.formatComicsReceived(comicsReceived);
-                    $scope.nextComicFlag = true;
-                } else {
-                    console.log("no hay mas comics");
-                    $scope.nextComicFlag = false;
-                }
-            } else {
-                $scope.hasComics = false;
-            }
-        }   
-
       
-
-        function addComic(comic){
-            $scope.newUser.comics.push(comic);
-            $scope.showFavComicsFlag = true;
-        }
-
         /* -- Generic Error mesages function */
 
          function commFailure(){

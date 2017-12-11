@@ -1,0 +1,30 @@
+<h2> Comics de Marvel favoritos </h2>
+
+    <div class="favs fav-comics" ng-show="comicComponent.arrayComics.length > 0">
+        <img class="comic favorite-item" height=150 width=150 src="{{favcomic.thumbnail}}" ng-repeat="favcomic in comicComponent.arrayComics">
+
+    </div>
+
+    <input class="form-control" type="text" placeholder="Buscar comics que empiezan por..." ng-model="comicQuery" ng-model-options="{ debounce: 1000 }" ng-change="comicComponent.searchComics(comicQuery)">
+    <div class="buffer"></div>
+        <div class="searchresults" ng-show="comicComponent.hasComics">
+            <div class="row">
+                <div ng-show="comicComponent.hiddenBlockFlag || comicComponent.comicsOffset == 0" class="col-md-2"></div>                        
+                <button ng-show="comicComponent.comicsOffset > 0" ng-click="comicComponent.previousComics(comicQuery)" class="arrow-button center-arrow col-md-2"> 
+                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 
+                </button>
+                <div class="search-results col-md-8">
+                    <img class="comic" ng-click="comicComponent.addComic(comic)" src="{{comic.thumbnail}}" height=150 width=150 alt="" ng-repeat="comic in comicComponent.comics track by comic.id">
+                </div>  
+                       
+                <button class="arrow-button center-arrow col-md-2" ng-show="comicComponent.nextComicFlag" ng-click="comicComponent.nextComics(comicQuery)"> 
+                    <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> 
+                </button>
+            </div>
+    
+        </div>
+    </div>
+
+    <!--
+    <div class="buffer"></div>
+    <div class="row">-->
